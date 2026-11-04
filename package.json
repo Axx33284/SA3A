@@ -1,7 +1,7 @@
 {
   "name": "sa3a",
   "productName": "SA3A",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "SA3A (ساعة) – prayer times, Qibla, Islamic calendar, alarms, timers and stopwatch for Windows",
   "main": "main.js",
   "author": "SA3A",

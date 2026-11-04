@@ -15,17 +15,10 @@
     </mask>
   </defs>
   <rect x="16" y="16" width="480" height="480" rx="112" fill="url(#bg)"/>
-  <g opacity=".10" fill="none" stroke="#fff" stroke-width="6">
-    <rect x="176" y="176" width="160" height="160"/>
-    <rect x="176" y="176" width="160" height="160" transform="rotate(45 256 256)"/>
-  </g>
   <rect width="512" height="512" fill="url(#gold)" mask="url(#crescent)"/>
   <g stroke="#fff" stroke-linecap="round">
-    <line x1="300" y1="270" x2="300" y2="180" stroke-width="20"/>
-    <line x1="300" y1="270" x2="362" y2="304" stroke-width="20"/>
+    <line x1="260" y1="252" x2="260" y2="96" stroke-width="20"/>
+    <line x1="260" y1="252" x2="378" y2="340" stroke-width="20"/>
   </g>
-  <circle cx="300" cy="270" r="18" fill="url(#gold)" stroke="#fff" stroke-width="6"/>
-  <g fill="#fff" opacity=".9">
-    <circle cx="300" cy="112" r="9"/><circle cx="420" cy="270" r="9"/><circle cx="300" cy="420" r="0"/>
-  </g>
+  <circle cx="260" cy="252" r="18" fill="url(#gold)" stroke="#fff" stroke-width="6"/>
 </svg>
