@@ -1,0 +1,86 @@
+{
+  "name": "sa3a",
+  "productName": "SA3A",
+  "version": "2.0.0",
+  "description": "SA3A (ساعة) – prayer times, Qibla, Islamic calendar, alarms, timers and stopwatch for Windows",
+  "main": "main.js",
+  "author": "SA3A",
+  "license": "UNLICENSED",
+  "private": true,
+  "scripts": {
+    "start": "electron .",
+    "vendor": "node scripts/vendor.js",
+    "test": "node --test test/*.test.js",
+    "dist": "electron-builder --win nsis --x64",
+    "pack": "electron-builder --dir"
+  },
+  "devDependencies": {
+    "adhan": "^4.4.3",
+    "electron": "^45.2.2",
+    "electron-builder": "^26.18.0",
+    "leaflet": "^1.9.4",
+    "lucide-static": "^1.68.0"
+  },
+  "build": {
+    "appId": "com.sa3a.app",
+    "productName": "SA3A",
+    "copyright": "© SA3A",
+    "directories": {
+      "output": "dist",
+      "buildResources": "build"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "package.json",
+      "src/**/*",
+      "!src/**/*.map"
+    ],
+    "asar": true,
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "build/icon.ico",
+      "executableName": "SA3A"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowElevation": true,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "SA3A",
+      "uninstallDisplayName": "SA3A",
+      "runAfterFinish": true,
+      "deleteAppDataOnUninstall": false,
+      "installerIcon": "build/icon.ico",
+      "uninstallerIcon": "build/icon.ico",
+      "installerHeaderIcon": "build/icon.ico",
+      "multiLanguageInstaller": true,
+      "installerLanguages": [
+        "en_US",
+        "ar_SA",
+        "tr_TR"
+      ],
+      "include": "build/installer.nsh",
+      "artifactName": "SA3A-Setup-${version}.exe"
+    },
+    "electronLanguages": [
+      "en-US",
+      "ar",
+      "tr"
+    ],
+    "compression": "maximum",
+    "asarUnpack": [
+      "src/assets/icon.png",
+      "src/assets/tray.png"
+    ]
+  }
+}
