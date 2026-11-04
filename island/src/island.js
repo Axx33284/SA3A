@@ -671,10 +671,10 @@
     leaveTimer = setTimeout(() => {
       if (S.hover || S.drag) return;
       if (S.detail) { S.detail = false; render(); }
-      if (S.expanded && S.settings.expandOn === 'hover') collapse();
+      if (S.expanded) collapse();
       // pending alerts that were put on hold while expanded come back
       if (!S.alert && S.alerts.length) nextAlert();
-    }, S.settings.collapseDelay);
+    }, S.settings.expandOn === 'hover' ? S.settings.collapseDelay : Math.max(3000, S.settings.collapseDelay));
     render();
   }
 
