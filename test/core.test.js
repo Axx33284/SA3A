@@ -3,7 +3,8 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 globalThis.adhan = require('adhan');
 
-const load = (m) => import(require('path').join(__dirname, '..', 'src', 'js', m));
+const { pathToFileURL } = require('url');
+const load = (m) => import(pathToFileURL(require('path').join(__dirname, '..', 'src', 'js', m)).href);
 const BEYLIKDUZU = { lat: 41.0026, lng: 28.64, country: 'TR' };
 const hm = (d) => d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Istanbul' });
 const mins = (s) => { const [h, m] = s.split(':').map(Number); return h * 60 + m; };
