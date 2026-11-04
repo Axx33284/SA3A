@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data: https: file:; style-src 'self' 'unsafe-inline'; script-src 'self'">
+  <title>WinIsland</title>
+  <link rel="stylesheet" href="island.css">
+</head>
+<body class="theme-black anim-spring">
+  <div id="backdrop"></div>
+  <div id="stage" class="v-top h-center">
+    <div id="cluster">
+      <div id="island" class="island" data-view="idle">
+        <div id="glow"></div>
+
+        <section class="view v-idle" data-view="idle">
+          <span class="idle-clock" id="idleClock"></span>
+          <span class="dots" id="idleDots"></span>
+        </section>
+
+        <section class="view v-compact" data-view="compact">
+          <div class="lead" id="cLead"></div>
+          <div class="trail" id="cTrail"></div>
+        </section>
+
+        <section class="view v-alert" data-view="alert">
+          <div class="lead" id="aLead"></div>
+          <div class="trail" id="aTrail"></div>
+        </section>
+
+        <section class="view v-notif" data-view="notif">
+          <div class="n-row">
+            <div class="n-icon" id="nIcon"></div>
+            <div class="n-text">
+              <div class="n-head"><span class="n-app" id="nApp"></span><span class="n-time" id="nTime"></span></div>
+              <div class="n-title" id="nTitle"></div>
+              <div class="n-body" id="nBody"></div>
+            </div>
+          </div>
+          <div class="n-actions">
+            <span class="n-more" id="nMore"></span>
+            <button class="pill-btn" data-act="n-dismiss">Dismiss</button>
+            <button class="pill-btn primary" data-act="n-open">Open</button>
+          </div>
+        </section>
+
+        <section class="view v-big" data-view="big">
+          <div class="big-row">
+            <div class="big-icon" id="bIcon"></div>
+            <div class="big-text"><div class="big-label" id="bLabel"></div><div class="big-value" id="bValue"></div></div>
+            <div class="big-actions" id="bActions"></div>
+          </div>
+        </section>
+
+        <section class="view v-expanded" data-view="expanded">
+          <div class="pane p-media" data-pane="media">
+            <div class="m-top">
+              <div class="m-art-wrap"><img class="m-art" id="mArt" alt=""><div class="m-art-fallback" id="mArtFallback"></div></div>
+              <div class="m-meta">
+                <div class="m-title marquee"><span id="mTitle"></span></div>
+                <div class="m-artist" id="mArtist"></div>
+              </div>
+              <div class="viz big" id="mViz"><i></i><i></i><i></i><i></i><i></i></div>
+            </div>
+            <div class="m-seek">
+              <span class="m-time" id="mPos">0:00</span>
+              <div class="bar" id="mBar"><div class="fill" id="mFill"></div><div class="knob" id="mKnob"></div></div>
+              <span class="m-time right" id="mRem">-0:00</span>
+            </div>
+            <div class="m-ctrls">
+              <button class="icon-btn small" id="mShuffle" title="Shuffle" data-act="m-shuffle"></button>
+              <button class="icon-btn" id="mPrev" title="Previous" data-act="m-prev"></button>
+              <button class="icon-btn big" id="mPlay" title="Play / pause" data-act="m-toggle"></button>
+              <button class="icon-btn" id="mNext" title="Next" data-act="m-next"></button>
+              <button class="icon-btn small" id="mRepeat" title="Repeat" data-act="m-repeat"></button>
+            </div>
+            <div class="m-foot">
+              <button class="src-btn" id="mSrc" data-act="m-focus" title="Open the app that is playing"></button>
+              <div class="m-sessions" id="mSessions"></div>
+            </div>
+          </div>
+
+          <div class="pane p-timer" data-pane="timer">
+            <div class="t-list" id="tList"></div>
+            <div class="t-stopwatch" id="tStopwatch"></div>
+            <div class="t-presets" id="tPresets"></div>
+          </div>
+
+          <div class="pane p-notifs" data-pane="notifs">
+            <div class="pane-head"><span>Notifications</span><button class="link-btn" data-act="n-clear">Clear all</button></div>
+            <div class="nl" id="nList"></div>
+          </div>
+
+          <div class="pane p-home" data-pane="home">
+            <div class="h-clock"><div class="h-time" id="hTime"></div><div class="h-date" id="hDate"></div></div>
+            <div class="h-stats" id="hStats"></div>
+            <div class="h-quick">
+              <button class="tile" data-act="dnd" id="hDnd"></button>
+              <button class="tile" data-act="h-timer"></button>
+              <button class="tile" data-act="h-stopwatch"></button>
+              <button class="tile" data-act="settings"></button>
+            </div>
+          </div>
+
+          <nav class="tabs" id="tabs"></nav>
+        </section>
+      </div>
+      <div id="bubble" class="bubble"></div>
+    </div>
+  </div>
+
+  <script src="shared/icons.js"></script>
+  <script src="shared/settings.js"></script>
+  <script src="shared/core.js"></script>
+  <script src="island.js"></script>
+</body>
+</html>

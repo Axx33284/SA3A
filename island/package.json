@@ -1,0 +1,69 @@
+{
+  "name": "winisland",
+  "productName": "WinIsland",
+  "version": "1.0.0",
+  "description": "WinIsland – a Dynamic Island for Windows 11: notifications, now playing, timers and live activities at the top of your screen",
+  "main": "main.js",
+  "author": "WinIsland",
+  "license": "UNLICENSED",
+  "private": true,
+  "scripts": {
+    "start": "electron .",
+    "demo": "electron . --demo",
+    "test": "node --test test/*.test.js",
+    "helper": "dotnet build native/IslandHelper/IslandHelper.csproj -c Release",
+    "dist": "electron-builder --win nsis --x64 --publish never"
+  },
+  "devDependencies": {
+    "electron": "^45.2.2",
+    "electron-builder": "^26.18.0"
+  },
+  "build": {
+    "appId": "com.winisland.app",
+    "productName": "WinIsland",
+    "copyright": "© WinIsland",
+    "directories": {
+      "output": "dist",
+      "buildResources": "build"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "package.json",
+      "lib/**/*",
+      "src/**/*"
+    ],
+    "extraResources": [
+      {
+        "from": "native/IslandHelper/bin/Release/net48",
+        "to": "helper",
+        "filter": ["IslandHelper.exe", "IslandHelper.exe.config"]
+      }
+    ],
+    "asar": true,
+    "win": {
+      "target": [{ "target": "nsis", "arch": ["x64"] }],
+      "icon": "build/icon.ico",
+      "executableName": "WinIsland"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowElevation": true,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "WinIsland",
+      "uninstallDisplayName": "WinIsland",
+      "runAfterFinish": true,
+      "deleteAppDataOnUninstall": false,
+      "installerIcon": "build/icon.ico",
+      "uninstallerIcon": "build/icon.ico",
+      "installerHeaderIcon": "build/icon.ico",
+      "include": "build/installer.nsh",
+      "artifactName": "WinIsland-Setup-${version}.exe"
+    },
+    "electronLanguages": ["en-US"],
+    "compression": "maximum"
+  }
+}

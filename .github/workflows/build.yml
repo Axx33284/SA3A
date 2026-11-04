@@ -4,6 +4,7 @@ on:
   push:
     branches: ['**']
     tags: ['v*']
+    paths-ignore: ['island/**', '.github/workflows/winisland.yml']
   workflow_dispatch:
     inputs:
       release:

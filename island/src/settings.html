@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self'">
+  <title>WinIsland Settings</title>
+  <link rel="stylesheet" href="settings.css">
+</head>
+<body>
+  <aside class="side">
+    <div class="brand"><img src="assets/icon.png" alt=""><div><b>WinIsland</b><small id="ver"></small></div></div>
+    <nav id="nav">
+      <button data-sec="welcome"><span data-icon="sparkle"></span>Get started</button>
+      <button data-sec="appearance"><span data-icon="palette"></span>Appearance</button>
+      <button data-sec="position"><span data-icon="layout"></span>Size &amp; position</button>
+      <button data-sec="behavior"><span data-icon="pointer"></span>Behavior</button>
+      <button data-sec="notifications"><span data-icon="bell"></span>Notifications</button>
+      <button data-sec="activities"><span data-icon="activity"></span>Live activities</button>
+      <button data-sec="about"><span data-icon="info"></span>About</button>
+    </nav>
+  </aside>
+
+  <main id="main">
+    <!-- Get started -->
+    <section class="sec" data-sec="welcome">
+      <h1>Welcome to WinIsland</h1>
+      <p class="lead">A Dynamic Island for Windows. Notifications, music and video, timers, battery, volume and more appear in the island at the top of your screen. Hover over the island to see details. Click it to expand it.</p>
+      <div class="card status-card" id="statusCard"></div>
+      <h2>Three quick steps</h2>
+      <div class="steps">
+        <div class="step"><div class="num">1</div><div class="grow"><b>Let WinIsland read notifications</b><p>Windows asks once. You can also turn on <i>Notification access</i> for WinIsland in Privacy &amp; security.</p></div>
+          <div class="row-btns"><button class="btn" data-action="request-access">Allow access</button><button class="btn ghost" data-ext="ms-settings:privacy-notifications">Privacy settings</button></div></div>
+        <div class="step"><div class="num">2</div><div class="grow"><b>Hide Windows’ own pop-ups</b><p>Turn on <i>Do not disturb</i> in Windows, or turn off <i>Show notification banners</i> for each app. Windows still collects your notifications, so WinIsland still shows them. You just won’t see the same pop-up twice.</p></div>
+          <div class="row-btns"><button class="btn ghost" data-ext="ms-settings:notifications">Windows notifications</button></div></div>
+        <div class="step"><div class="num">3</div><div class="grow"><b>Try it</b><p>Send a test notification, or preview a live activity. To control music and video, just play something: Spotify, YouTube in any browser, YouTube Music, Media Player and more.</p></div>
+          <div class="row-btns"><button class="btn" data-action="test-notification">Test notification</button><button class="btn ghost" data-preview="media">Show now playing</button></div></div>
+      </div>
+      <div class="footer-row"><button class="btn primary" id="done">Done</button></div>
+    </section>
+
+    <!-- Appearance -->
+    <section class="sec" data-sec="appearance">
+      <h1>Appearance</h1>
+      <h2>Theme</h2>
+      <div class="themes" id="themes"></div>
+      <h2>Accent colour</h2>
+      <div class="card"><div class="swatches" id="swatches"></div></div>
+      <h2>Island</h2>
+      <div class="card list">
+        <div class="item"><div><b>Resting look</b><small>What the island shows when nothing is going on</small></div><div class="seg" data-key="idleStyle" data-options="pill:Pill,clock:Clock,dot:Dot,hidden:Hidden"></div></div>
+        <div class="item"><div><b>Resting width</b><small>Width of the pill when idle</small></div><div class="range"><input type="range" min="60" max="260" step="2" data-key="idleWidth"><output></output></div></div>
+        <div class="item"><div><b>Album-art glow</b><small>Tint the island and waveform with the colours of what’s playing</small></div><label class="switch"><input type="checkbox" data-key="glow"><i></i></label></div>
+        <div class="item"><div><b>Waveform</b><small>Animated bars while media plays</small></div><label class="switch"><input type="checkbox" data-key="visualizer"><i></i></label></div>
+        <div class="item"><div><b>Animation</b><small>How the island morphs between shapes</small></div><div class="seg" data-key="animation" data-options="spring:Springy,smooth:Smooth,reduced:Minimal"></div></div>
+      </div>
+      <div class="row-btns preview-row"><span>Preview:</span><button class="btn ghost" data-preview="notification">Notification</button><button class="btn ghost" data-preview="media">Now playing</button><button class="btn ghost" data-preview="charging">Charging</button></div>
+    </section>
+
+    <!-- Position -->
+    <section class="sec" data-sec="position">
+      <h1>Size &amp; position</h1>
+      <h2>Where the island appears</h2>
+      <div class="card pos-card">
+        <div class="screen" id="screen"><div class="taskbar"></div></div>
+        <div class="grow list">
+          <div class="item"><div><b>Display</b></div><select data-key="display" id="displaySel"></select></div>
+          <div class="item"><div><b>Distance from the edge</b></div><div class="range"><input type="range" min="0" max="120" step="1" data-key="offsetY"><output></output></div></div>
+          <div class="item"><div><b>Horizontal nudge</b></div><div class="range"><input type="range" min="-600" max="600" step="2" data-key="offsetX"><output></output></div></div>
+        </div>
+      </div>
+      <h2>Size</h2>
+      <div class="card list">
+        <div class="item"><div><b>Island size</b><small>Scales everything: text, artwork, controls</small></div><div class="range wide"><input type="range" min="0.7" max="1.6" step="0.05" data-key="scale"><output></output></div></div>
+        <div class="item"><div><b>Presets</b></div><div class="row-btns"><button class="btn ghost" data-scale="0.85">Small</button><button class="btn ghost" data-scale="1">Default</button><button class="btn ghost" data-scale="1.2">Large</button><button class="btn ghost" data-scale="1.45">Extra large</button></div></div>
+      </div>
+      <div class="row-btns preview-row"><span>Preview:</span><button class="btn ghost" data-preview="expand">Expand</button><button class="btn ghost" data-preview="collapse">Collapse</button><button class="btn ghost" data-preview="notification">Notification</button></div>
+    </section>
+
+    <!-- Behavior -->
+    <section class="sec" data-sec="behavior">
+      <h1>Behavior</h1>
+      <div class="card list">
+        <div class="item"><div><b>Expand the island</b><small>Hover to peek, or click to open and click again to close</small></div><div class="seg" data-key="expandOn" data-options="hover:On hover,click:On click"></div></div>
+        <div class="item"><div><b>Hover delay</b><small>How long to hover before it expands</small></div><div class="range"><input type="range" min="0" max="1500" step="50" data-key="hoverDelay" data-unit="ms"><output></output></div></div>
+        <div class="item"><div><b>Collapse delay</b><small>How long it stays open after the mouse leaves</small></div><div class="range"><input type="range" min="0" max="3000" step="50" data-key="collapseDelay" data-unit="ms"><output></output></div></div>
+        <div class="item"><div><b>Hide during fullscreen apps</b><small>Games, videos and presentations</small></div><label class="switch"><input type="checkbox" data-key="hideInFullscreen"><i></i></label></div>
+        <div class="item"><div><b>Keep paused media</b><small>Minutes a paused player stays in the island (0 = hide it at once)</small></div><div class="range"><input type="range" min="0" max="120" step="1" data-key="pausedMediaTimeout" data-unit=" min"><output></output></div></div>
+        <div class="item"><div><b>Start with Windows</b></div><label class="switch"><input type="checkbox" data-key="startWithWindows"><i></i></label></div>
+      </div>
+      <h2>Tips</h2>
+      <div class="card tips">
+        <p><b>Hover</b> the island to peek at what’s happening. <b>Click</b> it to expand it.</p>
+        <p>In the expanded island, the <b>tabs</b> along the bottom switch between Now playing, Timers, Notifications and Home.</p>
+        <p><b>Drag</b> the progress bar to move through a song or video. <b>Scroll</b> over it to jump 5 seconds.</p>
+        <p><b>Right-click</b> the island to open these settings. The tray icon has a timer menu and Do not disturb.</p>
+      </div>
+    </section>
+
+    <!-- Notifications -->
+    <section class="sec" data-sec="notifications">
+      <h1>Notifications</h1>
+      <div class="card status-card" id="statusCard2"></div>
+      <div class="card list">
+        <div class="item"><div><b>Show notifications in the island</b></div><label class="switch"><input type="checkbox" data-key="features.notifications"><i></i></label></div>
+        <div class="item"><div><b>Do not disturb</b><small>No banners. Notifications are still listed in the island.</small></div><label class="switch"><input type="checkbox" data-key="dnd"><i></i></label></div>
+        <div class="item"><div><b>Banner time</b><small>How long a new notification stays open</small></div><div class="range"><input type="range" min="2" max="30" step="1" data-key="notificationDuration" data-unit=" s"><output></output></div></div>
+        <div class="item"><div><b>Show message text</b><small>Off: show only the app name until you hover (privacy)</small></div><label class="switch"><input type="checkbox" data-key="showNotificationBody"><i></i></label></div>
+        <div class="item"><div><b>Group messages from the same app</b></div><label class="switch"><input type="checkbox" data-key="groupByApp"><i></i></label></div>
+      </div>
+      <div class="row-btns"><button class="btn" data-action="test-notification">Send a test notification</button><button class="btn ghost" data-ext="ms-settings:notifications">Windows notification settings</button></div>
+      <h2>Apps</h2>
+      <p class="hint">Apps appear here after they send a notification. Turn an app off to keep its notifications out of the island.</p>
+      <div class="card list" id="apps"></div>
+    </section>
+
+    <!-- Live activities -->
+    <section class="sec" data-sec="activities">
+      <h1>Live activities</h1>
+      <div class="card list">
+        <div class="item"><div class="ic" data-icon="music"></div><div class="grow"><b>Now playing</b><small>Spotify, YouTube and YouTube Music in any browser, Media Player, VLC 4, Apple Music and other players: artwork, play/pause, skip and a progress bar you can drag</small></div><button class="btn ghost sm" data-preview="media">Preview</button><label class="switch"><input type="checkbox" data-key="features.media"><i></i></label></div>
+        <div class="item"><div class="ic" data-icon="timer"></div><div class="grow"><b>Timers &amp; stopwatch</b><small>Start them from the island or the tray. They count down in the island.</small></div><button class="btn ghost sm" data-preview="timer">Preview</button><label class="switch"><input type="checkbox" data-key="features.timers"><i></i></label></div>
+        <div class="item"><div class="ic" data-icon="volume"></div><div class="grow"><b>Volume</b><small>Replaces the Windows volume pop-up. You can drag it, or scroll over it.</small></div><button class="btn ghost sm" data-preview="volume">Preview</button><label class="switch"><input type="checkbox" data-key="features.volume"><i></i></label></div>
+        <div class="item"><div class="ic" data-icon="bolt"></div><div class="grow"><b>Battery</b><small>Charging animation and low battery warnings</small></div><button class="btn ghost sm" data-preview="charging">Preview</button><label class="switch"><input type="checkbox" data-key="features.battery"><i></i></label></div>
+        <div class="item"><div class="ic" data-icon="headphones"></div><div class="grow"><b>Audio devices</b><small>Shows when headphones, earbuds or speakers connect</small></div><button class="btn ghost sm" data-preview="device">Preview</button><label class="switch"><input type="checkbox" data-key="features.devices"><i></i></label></div>
+        <div class="item"><div class="ic" data-icon="mic"></div><div class="grow"><b>Camera &amp; microphone</b><small>A green or orange dot while an app uses them</small></div><button class="btn ghost sm" data-preview="mic">Preview</button><label class="switch"><input type="checkbox" data-key="features.privacy"><i></i></label></div>
+        <div class="item"><div class="ic" data-icon="bell"></div><div class="grow"><b>Timer sound</b><small>Chime when a timer ends</small></div><button class="btn ghost sm" data-preview="timer-done">Preview</button><label class="switch"><input type="checkbox" data-key="timerSound"><i></i></label></div>
+      </div>
+    </section>
+
+    <!-- About -->
+    <section class="sec" data-sec="about">
+      <h1>About</h1>
+      <div class="card about">
+        <img src="assets/icon.png" alt="">
+        <div><b>WinIsland</b><p id="aboutVer"></p><p class="hint">A Dynamic Island–style notification and live activity centre for Windows 10 and 11.</p></div>
+      </div>
+      <div class="card list">
+        <div class="item"><div><b>Notification source</b><small id="aboutSource"></small></div></div>
+        <div class="item"><div><b>Settings file</b><small>%APPDATA%\WinIsland\settings.json</small></div></div>
+        <div class="item"><div><b>Reset all settings</b><small>Muted apps and positions go back to the defaults</small></div><button class="btn ghost" id="reset">Reset</button></div>
+      </div>
+    </section>
+  </main>
+
+  <script src="shared/icons.js"></script>
+  <script src="shared/settings.js"></script>
+  <script src="shared/core.js"></script>
+  <script src="settings.js"></script>
+</body>
+</html>
