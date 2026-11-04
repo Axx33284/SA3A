@@ -51,11 +51,13 @@ jobs:
           cache-dependency-path: island/package-lock.json
 
       - name: Build the Windows helper (media, notifications, audio)
-        run: dotnet build native/IslandHelper/IslandHelper.csproj -c Release
+        run: |
+          dotnet build native/IslandHelper/IslandHelper.csproj -c Release
+          dotnet build native/MediaTestPlayer/MediaTestPlayer.csproj -c Release
 
       - name: Test the helper against real Windows APIs
         shell: powershell
-        run: powershell -NoProfile -ExecutionPolicy Bypass -File scripts\ci-helper-test.ps1 -Helper native\IslandHelper\bin\Release\net48\IslandHelper.exe
+        run: powershell -NoProfile -ExecutionPolicy Bypass -File scripts\ci-helper-test.ps1 -Helper native\IslandHelper\bin\Release\net48\IslandHelper.exe -Player native\MediaTestPlayer\bin\Release\net48\MediaTestPlayer.exe
 
       - run: npm ci
       - run: npm test

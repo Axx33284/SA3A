@@ -1,9 +1,10 @@
 # End-to-end test of IslandHelper.exe on a real Windows machine (GitHub Actions).
 # Run with Windows PowerShell 5.1 (it needs the built-in WinRT projection):
-#   powershell -File scripts\ci-helper-test.ps1 -Helper native\IslandHelper\bin\Release\net48\IslandHelper.exe
-param([Parameter(Mandatory = $true)][string]$Helper)
+#   powershell -File scripts\ci-helper-test.ps1 -Helper <IslandHelper.exe> -Player <MediaTestPlayer.exe>
+param([Parameter(Mandatory = $true)][string]$Helper, [Parameter(Mandatory = $true)][string]$Player)
 $ErrorActionPreference = 'Stop'
 $Helper = (Resolve-Path $Helper).Path
+$Player = (Resolve-Path $Player).Path
 $results = New-Object System.Collections.ArrayList
 function Check($name, $ok, $hard) {
   $tag = if ($ok) { 'PASS' } elseif ($hard) { 'FAIL' } else { 'WARN' }
@@ -64,41 +65,18 @@ Check 'fullscreen detection' ($script:seen['fullscreen'] -eq $true) $true
 Check 'audio endpoint (volume)' ($script:seen['volume'] -eq $true) $false
 Check 'privacy indicators' ($script:seen['privacy'] -eq $true) $true
 
-# ---------- 3. real media session (WinRT MediaPlayer in another process) ----------
-$wav = Join-Path $env:TEMP 'winisland-ci.wav'
-$rate = 8000; $secs = 120; $n = $rate * $secs
-$fs = [System.IO.File]::Create($wav); $bw = New-Object System.IO.BinaryWriter($fs)
-$bw.Write([Text.Encoding]::ASCII.GetBytes('RIFF')); $bw.Write([int](36 + $n * 2)); $bw.Write([Text.Encoding]::ASCII.GetBytes('WAVEfmt '))
-$bw.Write([int]16); $bw.Write([int16]1); $bw.Write([int16]1); $bw.Write([int]$rate); $bw.Write([int]($rate * 2)); $bw.Write([int16]2); $bw.Write([int16]16)
-$bw.Write([Text.Encoding]::ASCII.GetBytes('data')); $bw.Write([int]($n * 2))
-$buf = New-Object byte[] ($n * 2)   # silence is enough for a media session
-$bw.Write($buf); $bw.Close()
-
-$player = @"
-Add-Type -AssemblyName System.Runtime.WindowsRuntime
-`$null = [Windows.Media.Playback.MediaPlayer, Windows.Media.Playback, ContentType = WindowsRuntime]
-`$null = [Windows.Media.Core.MediaSource, Windows.Media.Core, ContentType = WindowsRuntime]
-`$p = New-Object Windows.Media.Playback.MediaPlayer
-`$p.Source = [Windows.Media.Core.MediaSource]::CreateFromUri([Uri]'$wav')
-`$u = `$p.SystemMediaTransportControls.DisplayUpdater
-`$u.Type = [Windows.Media.MediaPlaybackType]::Music
-`$u.MusicProperties.Title = 'WinIsland CI Song'
-`$u.MusicProperties.Artist = 'GitHub Actions'
-`$u.Update()
-`$p.Play()
-Start-Sleep -Seconds 100
-"@
-$playerFile = Join-Path $env:TEMP 'winisland-player.ps1'
-Set-Content -Path $playerFile -Value $player -Encoding UTF8
-$pl = Start-Process powershell -ArgumentList '-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', $playerFile -PassThru -WindowStyle Hidden
+# ---------- 3. real media session (a fake player that owns Windows media controls) ----------
+$pl = Start-Process $Player -ArgumentList '100' -PassThru -WindowStyle Hidden
 
 $song = Wait-For { param($m) $m.type -eq 'media' -and @($m.sessions | Where-Object { $_.title -eq 'WinIsland CI Song' }).Count -gt 0 } 40
-Check 'sees a playing media session (title, artist)' ($null -ne $song) $false
+Check 'sees a playing media session (title, artist)' ($null -ne $song) $true
 if ($song) {
   $s = @($song.sessions | Where-Object { $_.title -eq 'WinIsland CI Song' })[0]
   Write-Host "  session id=$($s.id) status=$($s.status) duration=$($s.duration) canSeek=$($s.canSeek)"
   Check 'artist is read' ($s.artist -eq 'GitHub Actions') $true
-  $null = Wait-For { param($m) $m.type -eq 'media' -and @($m.sessions | Where-Object { $_.id -eq $s.id -and $_.status -eq 'playing' }).Count -gt 0 } 15
+  $pp = Wait-For { param($m) $m.type -eq 'media' -and @($m.sessions | Where-Object { $_.id -eq $s.id -and $_.status -eq 'playing' -and $_.duration -gt 0 }).Count -gt 0 } 15
+  Check 'reports playing with a timeline' ($null -ne $pp) $true
+  if ($pp) { $s = @($pp.sessions | Where-Object { $_.id -eq $s.id })[0] }
   Send @{ cmd = 'media'; id = $s.id; action = 'pause' }
   $p1 = Wait-For { param($m) $m.type -eq 'media' -and @($m.sessions | Where-Object { $_.id -eq $s.id -and $_.status -eq 'paused' }).Count -gt 0 } 15
   Check 'pause command pauses the player' ($null -ne $p1) $true
@@ -109,7 +87,11 @@ if ($song) {
     Send @{ cmd = 'media'; id = $s.id; action = 'seek'; position = 60 }
     $p3 = Wait-For { param($m) $m.type -eq 'media' -and @($m.sessions | Where-Object { $_.id -eq $s.id -and $_.position -ge 55 -and $_.position -le 80 }).Count -gt 0 } 15
     Check 'seek moves the playback position' ($null -ne $p3) $true
-  } else { Check 'seek (player did not report a seekable timeline)' $false $false }
+  } else { Check 'seek (player did not report a seekable timeline)' $false $true }
+  Send @{ cmd = 'media'; id = $s.id; action = 'next' }
+  Start-Sleep -Seconds 2
+  $p4 = Wait-For { param($m) $m.type -eq 'media' -and @($m.sessions | Where-Object { $_.id -eq $s.id -and $_.position -lt 10 }).Count -gt 0 } 15
+  Check 'next-track command reaches the player' ($null -ne $p4) $true
 }
 try { Stop-Process -Id $pl.Id -Force } catch { }
 
